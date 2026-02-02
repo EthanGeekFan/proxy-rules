@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+
+# Cache
+cache/
+*.cache
+
+# Personal configs (may contain server info)
+config.json
+
+# macOS
+.DS_Store

@@ -1,0 +1,7 @@
+# Custom GFW-Blocked Domains
+# Add your own blocked domains here, one per line
+# Lines starting with # are ignored
+#
+# Example:
+# myservice.com
+# api.myservice.com

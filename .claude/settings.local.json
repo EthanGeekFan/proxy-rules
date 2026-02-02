@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(chmod:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(./run.sh:*)",
+      "Bash(wc:*)",
+      "Bash(du:*)",
+      "Bash(tree:*)"
+    ]
+  }
+}
