@@ -25,8 +25,17 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 DATA_DIR.mkdir(exist_ok=True)
 
 # Data sources
-GFWLIST_URL = "https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt"
-BLACKMATRIX7_BASE = "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule"
+# Set USE_JSDELIVR=True for China-accessible CDN (jsDelivr mirrors GitHub)
+USE_JSDELIVR = False
+
+if USE_JSDELIVR:
+    # jsDelivr CDN - accessible from China
+    GFWLIST_URL = "https://cdn.jsdelivr.net/gh/gfwlist/gfwlist@master/gfwlist.txt"
+    BLACKMATRIX7_BASE = "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule"
+else:
+    # GitHub raw - may be slow/blocked in China
+    GFWLIST_URL = "https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt"
+    BLACKMATRIX7_BASE = "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule"
 
 # Chinese media apps to include
 # Note: Add/remove apps as needed. Check available apps at:
@@ -217,7 +226,8 @@ def generate_shadowrocket_china(domains: Set[str]):
         f.write("bypass-system = true\n")
         f.write("skip-proxy = 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12, localhost, *.local\n")
         f.write("bypass-tun = 10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.0.0.0/24, 192.0.2.0/24, 192.88.99.0/24, 192.168.0.0/16, 198.18.0.0/15, 198.51.100.0/24, 203.0.113.0/24, 224.0.0.0/4, 255.255.255.255/32\n")
-        f.write("dns-server = system\n\n")
+        f.write("# Use Chinese DNS servers to avoid DNS leaks and get correct geo-based responses\n")
+        f.write("dns-server = 223.5.5.5, 223.6.6.6, 119.29.29.29\n\n")
 
         f.write("[Rule]\n")
         f.write("# Chinese media apps - route to China proxy\n")
@@ -251,11 +261,21 @@ def generate_glinet_policy(domains: Set[str]):
 
 
 def main():
+    global USE_JSDELIVR, GFWLIST_URL, BLACKMATRIX7_BASE
+
     parser = argparse.ArgumentParser(description="Generate proxy routing rules")
     parser.add_argument('--shadowrocket-gfw', action='store_true', help='Generate Shadowrocket GFW config only')
     parser.add_argument('--shadowrocket-china', action='store_true', help='Generate Shadowrocket China config only')
     parser.add_argument('--glinet', action='store_true', help='Generate GL.iNet policy only')
+    parser.add_argument('--use-jsdelivr', action='store_true', help='Use jsDelivr CDN (China-accessible) instead of GitHub raw')
     args = parser.parse_args()
+
+    # Enable jsDelivr if requested
+    if args.use_jsdelivr:
+        USE_JSDELIVR = True
+        GFWLIST_URL = "https://cdn.jsdelivr.net/gh/gfwlist/gfwlist@master/gfwlist.txt"
+        BLACKMATRIX7_BASE = "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule"
+        print("Using jsDelivr CDN (China-accessible)")
 
     # If no specific target, generate all
     generate_all = not (args.shadowrocket_gfw or args.shadowrocket_china or args.glinet)

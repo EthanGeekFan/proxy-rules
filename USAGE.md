@@ -111,6 +111,30 @@ Then regenerate:
 6. Enable "Based on the domain name" policy
 7. Clients connected to this router will have GFW-blocked traffic routed through US
 
+## Running from China
+
+GitHub raw URLs (`raw.githubusercontent.com`) are often blocked or very slow in China. Use the `--use-jsdelivr` flag to fetch rules via jsDelivr CDN:
+
+```bash
+# Use jsDelivr (China-accessible)
+./run.sh --use-jsdelivr
+
+# Can combine with specific targets
+./run.sh --use-jsdelivr --shadowrocket-china
+```
+
+### What is jsDelivr?
+
+jsDelivr is a free CDN that mirrors GitHub repositories and is accessible from China. It automatically converts:
+
+```
+# GitHub (blocked in China)
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/...
+
+# jsDelivr (China-accessible)
+https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/...
+```
+
 ## Updating Rules
 
 The script caches downloaded lists in `cache/` directory. To force update:
@@ -119,6 +143,10 @@ The script caches downloaded lists in `cache/` directory. To force update:
 # Delete cache and regenerate
 rm -rf cache/*
 ./run.sh
+
+# From China
+rm -rf cache/*
+./run.sh --use-jsdelivr
 ```
 
 ## Troubleshooting

@@ -18,16 +18,16 @@ Manage routing rules for Shadowrocket and GL.iNet router.
 ## Usage
 
 ```bash
-# Install dependencies
-pip install -r requirements.txt
-
 # Generate all configs
-python scripts/generate.py
+./run.sh
 
-# Or generate specific configs
-python scripts/generate.py --shadowrocket-gfw
-python scripts/generate.py --shadowrocket-china
-python scripts/generate.py --glinet
+# Generate specific configs
+./run.sh --shadowrocket-gfw
+./run.sh --shadowrocket-china
+./run.sh --glinet
+
+# For users in China (use jsDelivr CDN)
+./run.sh --use-jsdelivr
 ```
 
 ## Output Files
@@ -35,6 +35,37 @@ python scripts/generate.py --glinet
 - `output/shadowrocket-gfw.conf` - Import into Shadowrocket
 - `output/shadowrocket-china.conf` - Import into Shadowrocket
 - `output/glinet-gfw.txt` - Upload to GL.iNet router VPN Policy
+
+## Running from China
+
+GitHub raw URLs may be blocked. Use jsDelivr CDN:
+
+```bash
+./run.sh --use-jsdelivr
+```
+
+See [CHINA_ACCESS.md](CHINA_ACCESS.md) for details.
+
+## Debugging: Why Apps Still Detect Wrong Location?
+
+If Chinese apps still think you're not in China:
+
+**Quick fix**: Try adding missing domains to `data/custom-china.txt`
+
+**Deep analysis**: Intercept and analyze app traffic to find how it detects location:
+
+```bash
+# See quick start guide
+cat QUICK_START_ANALYSIS.md
+
+# Or full guide
+cat ANALYZE_XIMALAYA.md
+```
+
+Tools and scripts included:
+- `scripts/enable-proxy.sh` - Enable system proxy for traffic capture
+- `scripts/disable-proxy.sh` - Disable proxy after analysis
+- `scripts/analyze-traffic.py` - Automated analysis of captured traffic
 
 ## Data Sources
 

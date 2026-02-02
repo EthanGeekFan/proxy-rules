@@ -1,1 +1,4 @@
 requests>=2.31.0
+
+# Optional: For traffic analysis (install with: pip install mitmproxy)
+# mitmproxy>=10.0.0

@@ -5,3 +5,7 @@
 # Example:
 # example.com
 # api.example.com
+
+# Ximalaya (喜马拉雅) - Audio streaming platform
+ximalaya.com
+xmcdn.com
